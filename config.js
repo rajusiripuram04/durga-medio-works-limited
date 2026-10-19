@@ -90,6 +90,12 @@
 
   videos: [
     {
+      title: "Studio Film: Latest Work",
+      description: "A recent video project showcasing our creative editing work.",
+      type: "mp4",
+      url: "Video5.mp4",
+    },
+    {
       title: "Sri Ganeshaya Namaha — Devotional Motion Graphic",
       description:
         "A festive devotional animation featuring Lord Ganesha and a traditional puja setting.",

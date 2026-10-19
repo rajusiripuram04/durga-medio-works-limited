@@ -104,6 +104,14 @@ window.PORTFOLIO_PROJECTS = [
       "A reception space concept showing the Durga Digital Media Works identity in context.",
   },
   {
+    id: "video-studio-film",
+    name: "Studio Film: Latest Work",
+    category: "Video Editing",
+    video: "Video5.mp4",
+    description:
+      "A recent video project showcasing our creative editing work.",
+  },
+  {
     id: "video-ganesha-motion",
     name: "Sri Ganeshaya Namaha — Devotional Motion Graphic",
     category: "Video Editing",
