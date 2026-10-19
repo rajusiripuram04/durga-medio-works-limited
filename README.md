@@ -1,4 +1,4 @@
-﻿# Durga Media Works
+﻿# Durga Digital Media Works Limited
 
 A responsive static marketing site built with HTML, CSS, and vanilla JavaScript. It needs no framework, build step, or backend.
 
@@ -13,6 +13,7 @@ Open `index.html` in a browser, or run `python -m http.server 8000` in this fold
 - `script.js` initializes the page and keeps navigation, services, portfolio, videos, contact links, and metadata in separate functions.
 - `config.js` contains business details, copy, services, videos, testimonials, and SEO settings.
 - `portfolio-data.js` contains the project entries rendered in the portfolio.
+- `durga-digital-media-3d-logo.png` is the generated 3D company wordmark paired with the existing logo in the hero section.
 
 ## WhatsApp and Instagram
 
@@ -26,13 +27,13 @@ There is no enquiry form. Visitors open WhatsApp and send their message directly
 
 Add an entry to `portfolio-data.js` with a unique `id`, `name`, `category`, `image`, and `description`. Optional fields are `client` and `url`. Put image files in this folder or use an HTTPS image URL. Supported filters are `Logo Design`, `Branding`, `Graphic Design`, `Social Media`, and `Video Editing`; other categories appear under All Projects.
 
-The supplied `logo1.jpeg` through `logo5.jpeg` are the current portfolio samples. Keep `companyLog.jpeg` as the company logo.
+The supplied `Image1.jpeg` through `Image8.jpeg` are the current portfolio samples. Keep `companyLog.jpeg` as the company logo.
 
 ## Configure videos and testimonials
 
-Edit the `videos` array in `config.js`. Entries accept `title`, `description`, `type`, `url`, and optional `thumbnail`. Supported types are `youtube` (YouTube watch or short URL), `mp4` (direct HTTPS video or local MP4 path), and `embed` (HTTPS embeddable URL). Empty URLs show Coming Soon with no play control. Add genuine testimonials to `testimonials`; the section stays hidden while that list is empty.
+Edit the `videos` array in `config.js`. Entries accept `title`, `description`, `type`, `url`, and optional `thumbnail`. Supported types are `youtube` (YouTube watch or short URL), `mp4` (direct HTTPS video or local MP4 path), and `embed` (HTTPS embeddable URL). The supplied `Video1.mp4` through `Video3.mp4` are included in the video showcase. Empty URLs show Coming Soon with no play control. Add genuine testimonials to `testimonials`; the section stays hidden while that list is empty.
 
 ## Deploy
 
-Upload the project files and all six supplied JPEGs to GitHub Pages, Netlify, Vercel, or another static host. Use this folder as the publish directory; no build command is needed. Set `seo.url` in `config.js` after the production domain is known.
+Upload the project files and all image assets, including `durga-digital-media-3d-logo.png`, to GitHub Pages, Netlify, Vercel, or another static host. Use this folder as the publish directory; no build command is needed. Set `seo.url` in `config.js` after the production domain is known.
 "# marketing-project" 

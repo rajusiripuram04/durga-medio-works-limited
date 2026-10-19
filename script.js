@@ -174,11 +174,27 @@ function initializePortfolio() {
     activeIndex = (index + visibleProjects.length) % visibleProjects.length;
     const project = visibleProjects[activeIndex];
     const image = $("#modalImage");
+    const projectVideo = $("#modalProjectVideo");
     const client = $("#modalClient");
     const externalLink = $("#projectExternal");
 
-    image.src = project.image;
-    image.alt = `${project.name} — ${project.category}`;
+    const isVideoProject = Boolean(project.video);
+    image.hidden = isVideoProject;
+    projectVideo.hidden = !isVideoProject;
+    projectVideo.pause();
+
+    if (isVideoProject) {
+      projectVideo.src = getVideoUrl({ type: "mp4", url: project.video });
+      projectVideo.load();
+      projectVideo.play().catch(() => {});
+      image.removeAttribute("src");
+    } else {
+      projectVideo.removeAttribute("src");
+      projectVideo.load();
+      image.src = project.image;
+      image.alt = `${project.name} — ${project.category}`;
+    }
+
     $("#modalTitle").textContent = project.name;
     $("#modalCategory").textContent = project.category;
     $("#modalCaption").textContent = project.description;
@@ -191,7 +207,7 @@ function initializePortfolio() {
     if (projectUrl) openExternalLink(externalLink, projectUrl);
 
     $("#projectEnquiry").href = makeWhatsAppUrl(
-      `Hello ${config.companyName}, I liked your ${project.name} design. Can we discuss something similar for my business?`,
+      `Hello ${config.companyName}, I liked your ${project.name} project. Can we discuss something similar for my business?`,
     );
   }
 
@@ -204,18 +220,37 @@ function initializePortfolio() {
     visibleProjects.forEach((project, index) => {
       const card = createElement("article", "portfolio-item");
       const button = createElement("button", "portfolio-view");
-      const image = createElement("img");
       const metadata = createElement("div", "project-meta");
 
       button.type = "button";
       button.setAttribute("aria-label", `Preview ${project.name}`);
-      image.src = project.image;
-      image.alt = `${project.name} — ${project.category}`;
-      image.width = 800;
-      image.height = 800;
-      image.loading = "lazy";
+      let preview;
 
-      button.append(image, createElement("span", "view-arrow", "↗"));
+      if (project.video) {
+        preview = createElement("video");
+        preview.src = getVideoUrl({ type: "mp4", url: project.video });
+        preview.muted = true;
+        preview.defaultMuted = true;
+        preview.loop = true;
+        preview.autoplay = true;
+        preview.playsInline = true;
+        preview.preload = "metadata";
+        preview.setAttribute("aria-hidden", "true");
+        preview.addEventListener("loadedmetadata", () => {
+          if (preview.videoWidth > preview.videoHeight) {
+            card.classList.add("landscape-video");
+          }
+        }, { once: true });
+      } else {
+        preview = createElement("img");
+        preview.src = project.image;
+        preview.alt = `${project.name} — ${project.category}`;
+        preview.width = 800;
+        preview.height = 800;
+        preview.loading = "lazy";
+      }
+
+      button.append(preview, createElement("span", "view-arrow", "↗"));
       button.addEventListener("click", () => {
         returnFocusTarget = document.activeElement;
         showProject(index);
@@ -275,6 +310,10 @@ function initializePortfolio() {
   });
 
   dialog.addEventListener("close", () => {
+    const projectVideo = $("#modalProjectVideo");
+    projectVideo.pause();
+    projectVideo.removeAttribute("src");
+    projectVideo.load();
     document.body.style.overflow = "";
     returnFocusTarget?.focus();
   });
@@ -283,6 +322,12 @@ function initializePortfolio() {
 }
 
 function getVideoUrl(video) {
+  // Local MP4 assets should work both when served from a static host and when
+  // the user opens index.html directly from disk.
+  if (video.type === "mp4" && /^[\w.-]+\.mp4$/i.test(video.url || "")) {
+    return video.url;
+  }
+
   const videoUrl = getSafeWebUrl(video.url);
   if (!videoUrl) return "";
 
@@ -305,6 +350,7 @@ function initializeVideos() {
   config.videos.forEach((video) => {
     const card = createElement("article", "video-card");
     const thumbnail = createElement("div", "video-thumb");
+    const copy = createElement("div", "video-copy");
     const videoUrl = getVideoUrl(video);
 
     if (getSafeWebUrl(video.thumbnail)) {
@@ -316,43 +362,76 @@ function initializeVideos() {
     }
 
     if (videoUrl) {
-      const playButton = createElement("button", "play-video", "▶");
-      playButton.type = "button";
-      playButton.setAttribute("aria-label", `Play ${video.title}`);
-      playButton.addEventListener("click", () => {
-        returnFocusTarget = document.activeElement;
-        $("#videoModalTitle").textContent = video.title;
-
-        const player = createElement(video.type === "mp4" ? "video" : "iframe");
+      if (video.type === "mp4") {
+        const player = createElement("video");
         player.src = videoUrl;
+        player.muted = true;
+        player.defaultMuted = true;
+        player.loop = true;
+        player.autoplay = true;
+        player.playsInline = true;
+        player.preload = "auto";
+        player.setAttribute("aria-hidden", "true");
+        player.addEventListener("loadedmetadata", () => {
+          if (player.videoWidth > player.videoHeight) {
+            card.classList.add("landscape");
+          }
+        }, { once: true });
+        thumbnail.append(player);
 
-        if (video.type === "mp4") {
-          player.controls = true;
-          player.autoplay = true;
-          player.preload = "metadata";
-        } else {
+        const playButton = createElement("button", "play-video", "▶");
+        playButton.type = "button";
+        playButton.setAttribute("aria-label", `Watch ${video.title}`);
+        playButton.addEventListener("click", () => {
+          returnFocusTarget = document.activeElement;
+          $("#videoModalTitle").textContent = video.title;
+
+          const fullVideo = createElement("video");
+          fullVideo.src = videoUrl;
+          fullVideo.controls = true;
+          fullVideo.autoplay = true;
+          fullVideo.playsInline = true;
+          fullVideo.preload = "metadata";
+          $("#videoPlayer").replaceChildren(fullVideo);
+          dialog.showModal();
+          document.body.style.overflow = "hidden";
+        });
+        thumbnail.append(playButton);
+      } else {
+        const playButton = createElement("button", "play-video", "▶");
+        playButton.type = "button";
+        playButton.setAttribute("aria-label", `Play ${video.title}`);
+        playButton.addEventListener("click", () => {
+          returnFocusTarget = document.activeElement;
+          $("#videoModalTitle").textContent = video.title;
+
+          const player = createElement("iframe");
+          player.src = videoUrl;
           player.title = video.title;
           player.allow = "autoplay; fullscreen";
           player.allowFullscreen = true;
-        }
 
-        $("#videoPlayer").replaceChildren(player);
-        dialog.showModal();
-        document.body.style.overflow = "hidden";
-      });
-      thumbnail.append(playButton);
+          $("#videoPlayer").replaceChildren(player);
+          dialog.showModal();
+          document.body.style.overflow = "hidden";
+        });
+        thumbnail.append(playButton);
+      }
+
+      copy.append(
+        createElement("span", "video-index", String(config.videos.indexOf(video) + 1).padStart(2, "0")),
+        createElement("h3", "", video.title),
+        createElement("p", "", video.description),
+      );
     } else {
       thumbnail.append(
         createElement("span", "", "Coming Soon"),
         createElement("small", "", "STORIES IN THE MAKING"),
       );
+      copy.append(createElement("h3", "", video.title), createElement("p", "", video.description));
     }
 
-    card.append(
-      thumbnail,
-      createElement("h3", "", video.title),
-      createElement("p", "", video.description),
-    );
+    card.append(thumbnail, copy);
     $(".video-grid").append(card);
   });
 

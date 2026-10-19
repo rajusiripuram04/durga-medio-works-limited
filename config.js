@@ -1,11 +1,11 @@
 ﻿window.SITE_CONFIG = {
-  companyName: "Durga Media Works",
+  companyName: "Durga Digital Media Works Limited",
   description:
     "Creative designs. Powerful brands. Thoughtful visual identities, graphics and video for businesses and creators.",
 
   // Use a ten-digit Indian mobile number. The site adds India's 91 country code.
-  phone: "9182284243",
-  whatsapp: "9182284243",
+  phone: "7732006606",
+  whatsapp: "7732006606",
   email: "",
   instagram: "https://www.instagram.com/shashi_dp/",
   address: "",
@@ -18,7 +18,7 @@
   },
 
   seo: {
-    title: "Durga Media Works | Logo Design, Branding & Video Editing",
+    title: "Durga Digital Media Works Limited | Logo Design, Branding & Video Editing",
     description:
       "Memorable logo design, complete brand identities, graphic design and video editing for businesses and creators.",
     url: "",
@@ -27,7 +27,7 @@
 
   about: {
     story:
-      "Durga Media Works is a creative design and media studio for businesses, startups, creators and organizations. We shape ideas into memorable visual identities through logo design, branding, social media creative and video editing.",
+      "Durga Digital Media Works Limited is a creative design and media studio for businesses, startups, creators and organizations. We shape ideas into memorable visual identities through logo design, branding, social media creative and video editing.",
     mission:
       "Bring clarity and character to businesses through thoughtful visual design.",
     vision:
@@ -89,19 +89,34 @@
   ],
 
   videos: [
-    "Promotional Videos",
-    "Instagram Reels",
-    "YouTube Editing",
-    "Corporate Videos",
-    "Product Advertisements",
-    "Motion Graphics",
-  ].map((title) => ({
-    title,
-    description: "A closer look at our visual storytelling. Showcase coming soon.",
-    type: "mp4",
-    url: "",
-    thumbnail: "",
-  })),
+    {
+      title: "Sri Ganeshaya Namaha — Devotional Motion Graphic",
+      description:
+        "A festive devotional animation featuring Lord Ganesha and a traditional puja setting.",
+      type: "mp4",
+      url: "Video1.mp4",
+    },
+    {
+      title: "Women’s Health and Fertility Clinic Promo",
+      description:
+        "A promotional video introducing Dr. B. Poorna and the Sthree Sree clinic.",
+      type: "mp4",
+      url: "Video2.mp4",
+    },
+    {
+      title: "Fertility Care Patient Story and Follow-up",
+      description:
+        "A patient story about a positive beta-hCG result and clinical follow-up.",
+      type: "mp4",
+      url: "Video3.mp4",
+    },
+    {
+      title: "Latest Video Feature",
+      description: "A new video added to our creative showcase.",
+      type: "mp4",
+      url: "Video4.mp4",
+    },
+  ],
 
   // Add verified feedback only. Keep empty to hide the testimonial section.
   testimonials: [],
